@@ -21,7 +21,7 @@ namespace Task_2
 
             int maxIndex = FindIndexOfMaxElement(array);
 
-            Console.WriteLine($"Номер першого максимального елемента: {maxIndex + 1}");
+            Console.WriteLine($"Номер елемента з максимальним числом : {maxIndex + 1}");
         }
 
         static int FindIndexOfMaxElement(double[] arr)

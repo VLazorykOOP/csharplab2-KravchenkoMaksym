@@ -3,66 +3,60 @@
 
 namespace Task_4
 {
-    internal class Program
+    class Program
     {
         static void Main()
         {
-            Console.Write("Введiть кiлькiсть рядкiв: ");
+            Console.Write("Введiть кiлькiсть рядкiв (n): ");
             int n = int.Parse(Console.ReadLine());
 
-            // Ініціалізуємо та вводимо східчастий масив
-            int[][] jaggedArray = new int[n][];
+            Console.Write("Введiть кiлькiсть елементiв у кожному рядку (m): ");
+            int m = int.Parse(Console.ReadLine());
+
+            // Створення східчастого масиву
+            int[,] inputArray = new int[n, m];
+
+            // Заповнення масиву з консолі
             for (int i = 0; i < n; i++)
             {
-                Console.Write($"Введiть кiлькiсть елементiв у рядку {i + 1}: ");
-                int m = int.Parse(Console.ReadLine());
+                Console.WriteLine($"Введiть елементи для рядка {i + 1} (через пробiл): ");
+                string[] inputValues = Console.ReadLine().Split(' ');
 
-                jaggedArray[i] = new int[m];
-
-                Console.WriteLine($"Введiть елементи рядку {i + 1}:");
                 for (int j = 0; j < m; j++)
                 {
-                    Console.Write($"Елемент {j + 1}: ");
-                    jaggedArray[i][j] = int.Parse(Console.ReadLine());
+                    inputArray[i, j] = int.Parse(inputValues[j]);
                 }
             }
 
-            // Знаходимо номери перших від'ємних елементів та записуємо дані у новий масив
-            int[] resultArray = FindFirstNegativeElements(jaggedArray);
+            // Масив для зберігання результатів
+            int[] resultArray = new int[n];
 
-            // Виводимо результат
+            // Знаходження номеру першого від'ємного елемента в кожному рядку
+            for (int i = 0; i < n; i++)
+            {
+                resultArray[i] = FindFirstNegativeIndex(inputArray, i, m);
+            }
+
+            // Виведення результатів
             Console.WriteLine("Номери перших вiд'ємних елементiв у кожному рядку:");
-            PrintArray(resultArray);
+            for (int i = 0; i < n; i++)
+            {
+                Console.WriteLine($"Рядок {i + 1}: {(resultArray[i] == -1 ? "Немає вiд'ємних елементiв" : resultArray[i].ToString())}");
+            }
         }
 
-        static int[] FindFirstNegativeElements(int[][] arr)
+        // Метод для знаходження номеру першого від'ємного елемента в рядку
+        static int FindFirstNegativeIndex(int[,] array, int row, int length)
         {
-            int[] resultArray = new int[arr.Length];
-
-            for (int i = 0; i < arr.Length; i++)
+            for (int j = 0; j < length; j++)
             {
-                resultArray[i] = -1; // За замовчуванням, якщо в рядку немає від'ємного елемента
-
-                for (int j = 0; j < arr[i].Length; j++)
+                if (array[row, j] < 0)
                 {
-                    if (arr[i][j] < 0)
-                    {
-                        resultArray[i] = j + 1; // Номер першого від'ємного елемента (індекс + 1)
-                        break;
-                    }
+                    return j + 1; // Нумерація в масиві починається з 0, тому додаємо 1
                 }
             }
-
-            return resultArray;
-        }
-
-        static void PrintArray(int[] arr)
-        {
-            foreach (var element in arr)
-            {
-                Console.Write($"{element} ");
-            }
-            Console.WriteLine();
+            // Якщо від'ємних елементів немає, повертаємо -1
+            return -1;
         }
     }
 }
